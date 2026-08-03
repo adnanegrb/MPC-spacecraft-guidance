@@ -54,41 +54,34 @@ for your own problem.
 ## 🧮 Core Mathematics
 
 **Dynamics.** The chaser's relative motion follows the linearised
-Clohessy-Wiltshire-Hill equations, $\dot{\bm x} = A_c\bm x + B_c\bm u$,
+Clohessy-Wiltshire-Hill equations, $\dot{\boldsymbol{x}} = A_c\boldsymbol{x} + B_c\boldsymbol{u}$,
 discretised exactly via the matrix exponential:
 
-$$\bm x_{k+1} = A_d \bm x_k + B_d \bm u_k + \bm\xi_k, \qquad A_d = e^{A_c T_s}, \quad B_d = \int_0^{T_s} e^{A_c \tau} B_c \, d\tau$$
+$$\boldsymbol{x}_{k+1} = A_d \boldsymbol{x}_k + B_d \boldsymbol{u}_k + \boldsymbol{\xi}_k, \qquad A_d = e^{A_c T_s}, \quad B_d = \int_0^{T_s} e^{A_c \tau} B_c \, d\tau$$
 
 **Condensed QP.** Every MPC family reduces, online, to the same
 box-constrained quadratic program in the stacked control sequence
-$\bm v$:
+$\boldsymbol{v}$:
 
-$$\min_{\bm v} \ \tfrac{1}{2}\bm v^\top H \bm v + \bm f^\top \bm v \quad \text{s.t.} \quad \|\bm v_i\|_\infty \le u_{\max}, \qquad H = \mathcal B^\top \bar Q \mathcal B + \bar R$$
+$$\min_{\boldsymbol{v}} \ \tfrac{1}{2}\boldsymbol{v}^\top H \boldsymbol{v} + \boldsymbol{f}^\top \boldsymbol{v} \quad \text{s.t.} \quad \|\boldsymbol{v}_i\|_\infty \le u_{\max}, \qquad H = \mathcal{B}^\top \bar{Q} \mathcal{B} + \bar{R}$$
 
-**Tube MPC error dynamics.** Splitting the true state $\bm x_k = \bm z_k + \bm e_k$
+**Tube MPC error dynamics.** Splitting the true state $\boldsymbol{x}_k = \boldsymbol{z}_k + \boldsymbol{e}_k$
 into a nominal part and an LQR-corrected error decouples the dynamics:
 
-$$\bm e_{k+1} = A_{cl}\bm e_k + \bm\xi_k, \qquad A_{cl} = A_d - B_d K, \qquad K = (R + B_d^\top P B_d)^{-1}B_d^\top P A_d$$
+$$\boldsymbol{e}_{k+1} = A_{cl}\boldsymbol{e}_k + \boldsymbol{\xi}_k, \qquad A_{cl} = A_d - B_d K, \qquad K = (R + B_d^\top P B_d)^{-1}B_d^\top P A_d$$
 
 with $P$ the solution of the discrete algebraic Riccati equation. Since
 $A_{cl}$ is stable, the error stays inside a bounded invariant set, and
-the corridor constraint reduces to a tightened constraint on $\bm z_k$
+the corridor constraint reduces to a tightened constraint on $\boldsymbol{z}_k$
 alone, at no extra online cost.
 
-**Conditioning.** Because CWH is marginally stable ($|\lambda_i(A_d)|\approx1$),
-the condensed Hessian's condition number $\kappa(H)$ grows sharply with
-the horizon $N$, which is why first-order solvers (Nesterov) can stall
-where direct solves (ADMM via Cholesky) remain unaffected — the central
-empirical finding reproduced in `examples/`.
+**Conditioning.** Because CWH is marginally stable ($|\lambda_i(A_d)| \approx 1$), the condensed Hessian's condition number $\kappa(H)$ grows sharply with the horizon $N$, which is why first-order solvers (Nesterov) can stall where direct solves (ADMM via Cholesky) remain unaffected — the central empirical finding reproduced in `examples/`.
 
-**Closed-form error estimate.** A simple estimate of the guaranteed
-maximum position error, derived from the dominant eigenvalue of $A_{cl}$,
-lets you predict $\bar z$ from $Q,R$ without simulating the closed loop:
+**Closed-form error estimate.** A simple estimate of the guaranteed maximum position error, derived from the dominant eigenvalue of $A_{cl}$, lets you predict $\bar{z}$ from $Q,R$ without simulating the closed loop:
 
-$$\bar z(Q,R) \ \approx \ \frac{\alpha\,\bar w}{1-\rho(Q,R)}, \qquad \rho = \max_i\left|\lambda_i(A_{cl})\right|$$
+$$\bar{z}(Q,R) \ \approx \ \frac{\alpha\,\bar{w}}{1-\rho(Q,R)}, \qquad \rho = \max_i\left|\lambda_i(A_{cl})\right|$$
 
-validated to under $1\%$ mean error against direct simulation, for
-$Q/R \gtrsim 0.1$.
+validated to under $1\%$ mean error against direct simulation, for $Q/R \gtrsim 0.1$.
 
 ## 📚 Main Key References
 
