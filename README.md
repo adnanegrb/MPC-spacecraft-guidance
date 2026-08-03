@@ -77,7 +77,7 @@ alone, at no extra online cost.
 
 **Conditioning.** Because CWH is marginally stable ($|\lambda_i(A_d)| \approx 1$), the condensed Hessian's condition number $\kappa(H)$ grows sharply with the horizon $N$, which is why first-order solvers (Nesterov) can stall where direct solves (ADMM via Cholesky) remain unaffected, the central empirical finding reproduced in `examples/`.
 
-$.
+
 
 ## 📚 Main Key References
 
