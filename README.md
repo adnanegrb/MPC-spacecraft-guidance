@@ -75,7 +75,7 @@ $A_{cl}$ is stable, the error stays inside a bounded invariant set, and
 the corridor constraint reduces to a tightened constraint on $\boldsymbol{z}_k$
 alone, at no extra online cost.
 
-**Conditioning.** Because CWH is marginally stable ($|\lambda_i(A_d)| \approx 1$), the condensed Hessian's condition number $\kappa(H)$ grows sharply with the horizon $N$, which is why first-order solvers (Nesterov) can stall where direct solves (ADMM via Cholesky) remain unaffected — the central empirical finding reproduced in `examples/`.
+**Conditioning.** Because CWH is marginally stable ($|\lambda_i(A_d)| \approx 1$), the condensed Hessian's condition number $\kappa(H)$ grows sharply with the horizon $N$, which is why first-order solvers (Nesterov) can stall where direct solves (ADMM via Cholesky) remain unaffected, the central empirical finding reproduced in `examples/`.
 
 $.
 
