@@ -1,0 +1,77 @@
+# ─────────────────────────────────────────────────────────────────
+#  Example parameter set for a planar CWH rendezvous with Tube MPC.
+#
+#  This is ONE example configuration used in the report, not a fixed
+#  template you need to follow. Every field below is explained so
+#  you can swap in your own orbit, horizon, weights, or disturbance
+#  levels for your own problem.
+# ─────────────────────────────────────────────────────────────────
+
+dynamics:
+  # Target orbit altitude and Earth's gravitational parameter, used to
+  # compute the mean orbital rate n = sqrt(mu / (R_earth + altitude)^3),
+  # which sets the entries of the continuous CWH matrix A_c.
+  altitude_m: 500000.0
+  mu_earth: 3.986e+14
+  r_earth_m: 6371000.0
+
+discretization:
+  # Sampling period T_s used to build the discrete matrices
+  # A_d = exp(A_c T_s), B_d = int_0^{T_s} exp(A_c tau) B_c dtau.
+  # Shorter T_s generally improves the conditioning of the MPC Hessian
+  # (see the report's discussion of kappa(H)).
+  sampling_period_s: 10.0
+
+horizon:
+  # Number of prediction steps N looked ahead at every MPC iteration.
+  # Larger N gives more foresight but worsens conditioning on
+  # marginally stable dynamics such as CWH.
+  N: 20
+
+cost:
+  # Stage cost weights: Q penalises tracking error, R penalises thrust.
+  # Increasing Q relative to R prioritises accuracy over fuel, and vice
+  # versa (see the Q/R trade-off study in the report).
+  Q_diag: [100, 100, 1, 1]   # position weighted 100x more than velocity
+  Q_scale: 3000.0
+  R_diag: [1, 1]
+  R_scale: 100.0
+  # "dare" solves the Discrete Algebraic Riccati Equation for the
+  # terminal weight P; alternatively, set this to "Q" as a cheaper
+  # approximation.
+  terminal_weight: dare
+
+actuation:
+  # Componentwise thrust bound ||u_i||_inf <= u_max. Set to null to
+  # leave the thrust unconstrained.
+  u_max_mps2: 0.2
+
+corridor:
+  # Half-width of the safety corridor the chaser must stay within.
+  epsilon_m: 50.0
+
+disturbance:
+  # Componentwise bound on the worst-case disturbance at each step.
+  w_bar_pos_m: 5.0
+  w_bar_vel_mps: 0.01
+
+reference_trajectory:
+  # A simple straight-line along-track approach, from y0 to yf, with
+  # zero radial offset. Replace with your own reference generator for
+  # other manoeuvres (see the five standard manoeuvres in the report).
+  type: straight_line_along_track
+  y0_m: 15000.0
+  yf_m: 1000.0
+  x0_m: 0.0
+
+simulation:
+  n_steps: 60
+
+solvers:
+  admm:
+    # ADMM penalty rho; "lambda_max_Q" uses the largest eigenvalue of Q,
+    # the choice justified in the report (same order as lambda_max(H)).
+    rho: lambda_max_Q
+    n_iter: 30
+  nesterov:
+    n_iter: 100
