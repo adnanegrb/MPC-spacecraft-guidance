@@ -77,11 +77,7 @@ alone, at no extra online cost.
 
 **Conditioning.** Because CWH is marginally stable ($|\lambda_i(A_d)| \approx 1$), the condensed Hessian's condition number $\kappa(H)$ grows sharply with the horizon $N$, which is why first-order solvers (Nesterov) can stall where direct solves (ADMM via Cholesky) remain unaffected — the central empirical finding reproduced in `examples/`.
 
-**Closed-form error estimate.** A simple estimate of the guaranteed maximum position error, derived from the dominant eigenvalue of $A_{cl}$, lets you predict $\bar{z}$ from $Q,R$ without simulating the closed loop:
-
-$$\bar{z}(Q,R) \ \approx \ \frac{\alpha\,\bar{w}}{1-\rho(Q,R)}, \qquad \rho = \max_i\left|\lambda_i(A_{cl})\right|$$
-
-validated to under $1\%$ mean error against direct simulation, for $Q/R \gtrsim 0.1$.
+$.
 
 ## 📚 Main Key References
 
