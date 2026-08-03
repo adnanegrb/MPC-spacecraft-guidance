@@ -16,8 +16,11 @@ This repository provides clean Python implementations of real-time MPC algorithm
 
 ```
 algos/        core solver for each algorithmic family
-examples/     one script per paper, reproducing its reference example
-utils/        shared dynamics utilities
+solvers/       low-level QP solvers shared across algorithms (ADMM, Nesterov)
+examples/      one script per paper, reproducing its reference example
+utils/         shared dynamics utilities
+tests/         correctness and closed-loop guarantee tests (pytest)
+configs/       example parameter set, to adapt to your own problem
 ```
 
 ## ⚙️ Installation
@@ -27,6 +30,26 @@ git clone https://github.com/adnanegrb/MPC-spacecraft-guidance.git
 cd MPC-spacecraft-guidance
 pip install -r requirements.txt
 ```
+
+## ✅ Testing
+
+```bash
+pip install pytest
+pytest tests/
+```
+
+Tests cover solver correctness (ADMM and Nesterov agree on the same QP,
+both respect the thrust bound), and closed-loop guarantees (the LQR gain
+stabilises the error dynamics, the tracking error stays bounded under
+bounded disturbances, the Hessian conditioning grows with the horizon
+as discussed in the report).
+
+## 🔧 Configuration
+
+`configs/example_params.yaml` is one example parameter set used in the
+report, not a fixed template. Every field is commented with its role, so
+you can swap in your own orbit, horizon, weights, or disturbance levels
+for your own problem.
 
 ## 📚 Main Key References
 
