@@ -8,11 +8,11 @@
 
 > Real-time Model Predictive Control for autonomous spacecraft guidance. Implementing Linear MPC, Tube MPC, Fast MPC and Successive Convexification from scratch, with no optimization library, and reproducing the reference examples from the underlying papers.
 
-## 📌 Context
+## Context
 
 This repository provides clean Python implementations of real-time MPC algorithms for autonomous spacecraft guidance and orbital rendezvous. It covers four algorithmic families: Linear MPC, Tube MPC for formal robustness guarantees under bounded disturbances, Fast MPC for embedded-oriented solvers, and Successive Convexification for nonlinear problems. Every solver is implemented from scratch using only basic linear algebra, with no external optimization library, and validated against the examples presented in the corresponding papers.
 
-## 🗂 Structure
+## Structure
 
 ```
 algos/        core solver for each algorithmic family
@@ -23,7 +23,7 @@ tests/         correctness and closed-loop guarantee tests (pytest)
 configs/       example parameter set, to adapt to your own problem
 ```
 
-## ⚙️ Installation
+## Installation
 
 ```bash
 git clone https://github.com/adnanegrb/MPC-spacecraft-guidance.git
@@ -31,7 +31,7 @@ cd MPC-spacecraft-guidance
 pip install -r requirements.txt
 ```
 
-## ✅ Testing
+## Testing
 
 ```bash
 pip install pytest
@@ -51,7 +51,7 @@ report, not a fixed template. Every field is commented with its role, so
 you can swap in your own orbit, horizon, weights, or disturbance levels
 for your own problem.
 
-## 🧮 Core Mathematics
+## Core Mathematics
 
 **Dynamics.** The chaser's relative motion follows the linearised
 Clohessy-Wiltshire-Hill equations, $\dot{\boldsymbol{x}} = A_c\boldsymbol{x} + B_c\boldsymbol{u}$,
@@ -79,7 +79,7 @@ alone, at no extra online cost.
 
 
 
-## 📚 Main Key References
+## Main Key References
 
 **Hartley (2015)** : A Tutorial on Model Predictive Control for Spacecraft Rendezvous.
 
